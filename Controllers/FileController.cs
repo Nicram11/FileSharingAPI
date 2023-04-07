@@ -1,4 +1,6 @@
-﻿using FileSharingAPI.Services;
+﻿using FileSharingAPI.FileManagment.Core;
+using FileSharingAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 
@@ -7,6 +9,7 @@ namespace FileSharingAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FileController : ControllerBase
     {
         private readonly IFileStorageService _fileStorageService;
