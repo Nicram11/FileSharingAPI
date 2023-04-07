@@ -35,7 +35,7 @@ namespace FileSharingAPI.Controllers
                 UploadDate = DateTime.Now
             };
 
-            await _fileStorageService.SaveFileAsync(file, fileModel.Id.ToString());
+         //   await _fileStorageService.SaveFileAsync(file, fileModel.Id.ToString());
             var shareableLink = Url.Action(nameof(Download), new { id = fileModel.Id});
             return Ok(shareableLink);
         }
@@ -44,13 +44,14 @@ namespace FileSharingAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Download(string id)
         {
-            var fileModel = await _fileStorageService.GetFileAsync(id);
-            if (fileModel == null)
-            {
-                return NotFound();
-            }
-            var stream = await _fileStorageService.ReadFileAsync(fileModel.FilePath);
-            return File(stream, fileModel.ContentType, fileModel.FileName);
+            /*   var fileModel = await _fileStorageService.GetFileAsync(id);
+               if (fileModel == null)
+               {
+                   return NotFound();
+               }
+               var stream = await _fileStorageService.ReadFileAsync(fileModel.FilePath);
+               return File(stream, fileModel.ContentType, fileModel.FileName);*/
+            return Ok();
         }
 
     }

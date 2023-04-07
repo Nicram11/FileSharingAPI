@@ -2,8 +2,14 @@
 {
     public class SaveFileResult
     {
-        public Boolean Success { get; set; }
+        public static bool SaveFileResult_SUCCESSED = true;
+        public static bool SaveFileResult_FAILED = false;
 
+        public Boolean Success { get; set; }
+        public SaveFileResult(bool result)
+        {
+            Success = result;
+        }
         public void Failed()
         {
             Success = false;

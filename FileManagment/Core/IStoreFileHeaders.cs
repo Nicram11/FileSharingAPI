@@ -7,7 +7,7 @@ namespace FileSharingAPI.FileManagment.Core
     {
 
         public Task<FileHeader> GetFileHeaderAsync(Guid id);
-        public Task<bool> CreateFileHeaderAsync(CreateFileRequest request);
+        public Task<Guid> CreateFileHeaderAsync(CreateFileRequest request);
         public Task<int> DeleteFileHeaderAsync(Guid id);
     }
 }

@@ -1,4 +1,6 @@
 using FileSharingAPI.Entities;
+using FileSharingAPI.FileManagment.Core;
+using FileSharingAPI.FileManagment.Infrastructure;
 using FileSharingAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +21,8 @@ builder.Services.AddDbContext<FileSharingDbContext>(options => options.UseSqlSer
 builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedEmail = false).AddEntityFrameworkStores<FileSharingDbContext>();
 
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+builder.Services.AddScoped<IStoreFileHeaders, StoreFileHeaders>();
+builder.Services.AddScoped<IStoreFiles, StoreFiles>();
 
 
 

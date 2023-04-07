@@ -13,9 +13,9 @@ namespace FileSharingAPI.FileManagment.Infrastructure
 
 
 
-        public async Task SaveFileAsync(IFormFile file, string fileId, string fileStoragePath)
+        public async Task SaveFileAsync(IFormFile file, Guid fileId, string fileStoragePath)
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileStoragePath, fileId);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileStoragePath, fileId.ToString());
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);

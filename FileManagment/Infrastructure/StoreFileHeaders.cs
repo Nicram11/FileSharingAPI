@@ -14,9 +14,26 @@ namespace FileSharingAPI.FileManagment.Infrastructure
             _dbContext = dbContext;
         }
 
-        public async Task<bool> CreateFileHeaderAsync(CreateFileRequest request)
+        public async Task<Guid> CreateFileHeaderAsync(CreateFileRequest request)
         {
-            throw new NotImplementedException();
+
+            var fileHeader = new FileHeader
+            {
+                Id = Guid.NewGuid(),
+                FileName = request.FileName,
+                FilePath = request.FilePath,
+                ContentType = request.ContentType,
+                FileSize = request.FileSize,
+                UploadDate = request.UploadDate,
+                UserId = request.UserId
+            };
+
+            _dbContext.Add(fileHeader);
+            var result = await _dbContext.SaveChangesAsync();
+
+            if(result == 0) return Guid.Empty;
+
+            return fileHeader.Id;
         }
 
         public async Task<int> DeleteFileHeaderAsync(Guid id)
