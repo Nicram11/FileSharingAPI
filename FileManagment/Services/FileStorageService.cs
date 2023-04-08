@@ -26,20 +26,31 @@ namespace FileSharingAPI.Services
         }
 
 
-        public async Task<SaveFileResult> SaveFileAsync(IFormFile file,CreateFileRequest createFileRequest ,Claim user)
+        public async Task<SaveFileResult> SaveFileAsync(IFormFile file,CreateFileRequest createFileRequest)
         {
-
-            var result = await _storeFileHeaders.CreateFileHeaderAsync(createFileRequest);
+          
+            var createdFileGuid = await _storeFileHeaders.CreateFileHeaderAsync(createFileRequest, _fileStoragePath);
             
-            if (result.Equals(Guid.Empty))
+            if (createdFileGuid.Equals(Guid.Empty))
                 return new SaveFileResult(SaveFileResult.SaveFileResult_FAILED);
 
-            await _storeFiles.SaveFileAsync(file, result, _fileStoragePath);
+            await _storeFiles.SaveFileAsync(file, createdFileGuid, _fileStoragePath);
 
-            return new SaveFileResult(SaveFileResult.SaveFileResult_SUCCESSED);
-
+            return new SaveFileResult(SaveFileResult.SaveFileResult_SUCCESSED, createdFileGuid);
 
         }
 
+        public async Task<DownloadFileResult> DownloadAsync(Guid guid)
+        {
+            var fileHeader = await _storeFileHeaders.GetFileHeaderAsync(guid);
+            if (fileHeader is null)
+                return new DownloadFileResult(DownloadFileResult.FAILED);
+
+           var stream =  await _storeFiles.ReadFileAsync(fileHeader.FilePath);
+           if(stream is null)
+                return new DownloadFileResult(DownloadFileResult.FAILED);
+
+           return new DownloadFileResult(DownloadFileResult.SUCCESSED, stream, fileHeader);
+        }
     }
 }

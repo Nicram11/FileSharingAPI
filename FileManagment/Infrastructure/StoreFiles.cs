@@ -4,25 +4,23 @@ namespace FileSharingAPI.FileManagment.Infrastructure
 {
     public class StoreFiles : IStoreFiles
     {
-        public async Task<Stream> ReadFileAsync(string fileName, string fileStoragePath)
+        public async Task<Stream> ReadFileAsync(string filePath)
         {
-            var filePath = Path.Combine(fileStoragePath, fileName);
+           
             var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             return await Task.FromResult(stream);
         }
 
-
-
-        public async Task SaveFileAsync(IFormFile file, Guid fileId, string fileStoragePath)
+        public async Task SaveFileAsync(IFormFile file, Guid fileGuid, string fileStoragePath)
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileStoragePath, fileId.ToString());
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileStoragePath, fileGuid.ToString() + Extension.GetExtensionFromContentType(file.ContentType));
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
         }
 
-        public Task DeleteFileAsync(string fileName, string fileStoragePath)
+        public Task DeleteFileAsync(Guid fileName, string fileStoragePath)
         {
             throw new NotImplementedException();
         }

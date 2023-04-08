@@ -1,9 +1,11 @@
-﻿using FileSharingAPI.FileManagment.Core;
+﻿using FileSharingAPI.Entities;
+using FileSharingAPI.FileManagment.Core;
+using FileSharingAPI.FileManagment.Model;
 using FileSharingAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
-
+using System.Security.Claims;
 
 namespace FileSharingAPI.Controllers
 {
@@ -26,32 +28,39 @@ namespace FileSharingAPI.Controllers
                 return BadRequest("File is empty");
             }
 
-            var fileModel = new Entities.FileHeader
+            var createFileRequest = new CreateFileRequest()
             {
-                Id = Guid.NewGuid(),
                 FileName = file.FileName,
                 ContentType = file.ContentType,
                 FileSize = file.Length,
-                UploadDate = DateTime.Now
+                UploadDate = DateTime.Now,
+                UserId = User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value
             };
 
-         //   await _fileStorageService.SaveFileAsync(file, fileModel.Id.ToString());
-            var shareableLink = Url.Action(nameof(Download), new { id = fileModel.Id});
+        
+
+            var result = await _fileStorageService.SaveFileAsync(file, createFileRequest);
+            
+            if (!result.Success)
+                return BadRequest("Something went Wrong");
+
+
+            var shareableLink = Url.Action(nameof(Download), new { id = result.CreatedFileGuid});
             return Ok(shareableLink);
         }
 
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Download(string id)
+        public async Task<IActionResult> Download(Guid id)
         {
-            /*   var fileModel = await _fileStorageService.GetFileAsync(id);
-               if (fileModel == null)
-               {
-                   return NotFound();
-               }
-               var stream = await _fileStorageService.ReadFileAsync(fileModel.FilePath);
-               return File(stream, fileModel.ContentType, fileModel.FileName);*/
-            return Ok();
+          
+               var result = await _fileStorageService.DownloadAsync(id);
+            if(result.Success)
+               return File(result.Stream, result.FileHeader.ContentType, result.FileHeader.FileName);
+
+            return NotFound();
+
+          
         }
 
     }

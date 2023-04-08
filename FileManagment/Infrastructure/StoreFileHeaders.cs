@@ -14,14 +14,14 @@ namespace FileSharingAPI.FileManagment.Infrastructure
             _dbContext = dbContext;
         }
 
-        public async Task<Guid> CreateFileHeaderAsync(CreateFileRequest request)
+        public async Task<Guid> CreateFileHeaderAsync(CreateFileRequest request, string filePath)
         {
-
+            Guid guid = Guid.NewGuid();
             var fileHeader = new FileHeader
             {
-                Id = Guid.NewGuid(),
+                Id = guid,
                 FileName = request.FileName,
-                FilePath = request.FilePath,
+                FilePath = Path.Combine(filePath, guid.ToString() + Extension.GetExtensionFromContentType(request.ContentType)),
                 ContentType = request.ContentType,
                 FileSize = request.FileSize,
                 UploadDate = request.UploadDate,
@@ -31,7 +31,7 @@ namespace FileSharingAPI.FileManagment.Infrastructure
             _dbContext.Add(fileHeader);
             var result = await _dbContext.SaveChangesAsync();
 
-            if(result == 0) return Guid.Empty;
+            if (result == 0) return Guid.Empty;
 
             return fileHeader.Id;
         }
@@ -41,7 +41,7 @@ namespace FileSharingAPI.FileManagment.Infrastructure
             var fileHeader = await GetFileHeaderAsync(id);
             _dbContext.Files.Remove(fileHeader);
             return await _dbContext.SaveChangesAsync();
-            
+
         }
         public async Task<FileHeader> GetFileHeaderAsync(Guid id)
         {
