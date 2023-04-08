@@ -63,6 +63,14 @@ namespace FileSharingAPI.Controllers
           
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetUserFiles()
+        {
+            var files = await _fileStorageService.GetUserFileHeadersAsync(User);
+
+            return Ok(files);
+        }
+
     }
 
 }

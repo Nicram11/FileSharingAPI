@@ -49,5 +49,14 @@ namespace FileSharingAPI.FileManagment.Infrastructure
 
             //return await Task.FromResult(fileHeader);
         }
+
+        public async Task<List<FileHeader>> GetUserFileHeadersAsync(string userId)
+        {
+            User user = await _dbContext.Users.Include(u => u.Files).FirstOrDefaultAsync(u => u.Id == userId);
+            
+            if (user is null) return null;
+
+            return user.Files.ToList<FileHeader>();
+        }
     }
 }

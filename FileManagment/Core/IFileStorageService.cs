@@ -7,5 +7,6 @@ namespace FileSharingAPI.FileManagment.Core
     {
         public Task<SaveFileResult> SaveFileAsync(IFormFile file, CreateFileRequest createFileRequest);
         public Task<DownloadFileResult> DownloadAsync(Guid guid);
+        public Task<List<GetFileHeadersResult>> GetUserFileHeadersAsync(ClaimsPrincipal user);
     }
 }

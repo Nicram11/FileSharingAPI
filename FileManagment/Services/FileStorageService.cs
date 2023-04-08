@@ -1,4 +1,5 @@
-﻿using FileSharingAPI.Entities;
+﻿using AutoMapper;
+using FileSharingAPI.Entities;
 using FileSharingAPI.FileManagment.Core;
 using FileSharingAPI.FileManagment.Model;
 using System;
@@ -21,7 +22,6 @@ namespace FileSharingAPI.Services
             _configuration = configuration;
             this._storeFileHeaders = storeFileHeaders;
             this._storeFiles = storeFiles;
-
             _fileStoragePath = _configuration["AppSettings:FilesPath"];
         }
 
@@ -51,6 +51,28 @@ namespace FileSharingAPI.Services
                 return new DownloadFileResult(DownloadFileResult.FAILED);
 
            return new DownloadFileResult(DownloadFileResult.SUCCESSED, stream, fileHeader);
+        }
+
+        public async Task<List<GetFileHeadersResult>> GetUserFileHeadersAsync(ClaimsPrincipal user)
+        {
+            var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+            var fileHeaders = await _storeFileHeaders.GetUserFileHeadersAsync(userId);
+
+            var result = new List<GetFileHeadersResult>();
+            foreach(var f in fileHeaders)
+            {
+                result.Add(new GetFileHeadersResult
+                {
+                    Id = f.Id,
+                    FileName = f.FileName,
+                    ContentType = f.ContentType,
+                    FileSize = f.FileSize,
+                    UploadDate = f.UploadDate
+                });
+            }
+            
+            return result;
         }
     }
 }
