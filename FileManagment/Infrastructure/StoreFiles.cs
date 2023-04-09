@@ -14,10 +14,10 @@ namespace FileSharingAPI.FileManagment.Infrastructure
         public async Task SaveFileAsync(IFormFile file, Guid fileGuid, string fileStoragePath)
         {
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileStoragePath, fileGuid.ToString() + Extension.GetExtensionFromContentType(file.ContentType));
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
+           
+            using FileStream stream = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(stream);
+        
         }
 
         public Task DeleteFileAsync(Guid fileName, string fileStoragePath)
