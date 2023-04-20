@@ -1,5 +1,5 @@
-﻿using FileSharingAPI.Entities;
-using FileSharingAPI.FileManagment.Core;
+﻿using FileSharingAPI.Application.Interfaces;
+using FileSharingAPI.Entities;
 using FileSharingAPI.FileManagment.Model;
 using FileSharingAPI.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -49,7 +49,7 @@ namespace FileSharingAPI.Controllers
             return Ok(shareableLink);
         }
 
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Download(Guid id)
         {

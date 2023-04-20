@@ -2,10 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
-namespace FileSharingAPI.Models
+namespace FileSharingAPI.Application.Models.Security
 {
 
-    public class LoginRequest 
+    public class LoginRequest
     {
 
         [Required]
@@ -18,6 +18,6 @@ namespace FileSharingAPI.Models
 
         [Display(Name = "Remember me")]
         public bool RememberMe { get; set; }
-    
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿using FileSharingAPI.FileManagment.Model;
 using System.Security.Claims;
 
-namespace FileSharingAPI.FileManagment.Core
+namespace FileSharingAPI.Application.Interfaces
 {
     public interface IFileStorageService
     {

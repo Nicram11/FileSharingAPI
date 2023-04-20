@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using FileSharingAPI.Application.Interfaces;
 using FileSharingAPI.Entities;
-using FileSharingAPI.FileManagment.Core;
 using FileSharingAPI.FileManagment.Model;
 using System;
 using System.IO;
@@ -25,10 +25,8 @@ namespace FileSharingAPI.Services
             _fileStoragePath = _configuration["AppSettings:FilesPath"];
         }
 
-
         public async Task<SaveFileResult> SaveFileAsync(IFormFile file,CreateFileRequest createFileRequest)
         {
-          
             var createdFileGuid = await _storeFileHeaders.CreateFileHeaderAsync(createFileRequest, _fileStoragePath);
             
             if (createdFileGuid.Equals(Guid.Empty))
@@ -71,7 +69,6 @@ namespace FileSharingAPI.Services
                     UploadDate = f.UploadDate
                 });
             }
-            
             return result;
         }
     }

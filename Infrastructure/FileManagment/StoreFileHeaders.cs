@@ -1,10 +1,10 @@
-﻿using FileSharingAPI.Database;
+﻿using FileSharingAPI.Application.Interfaces;
+using FileSharingAPI.Database;
 using FileSharingAPI.Entities;
-using FileSharingAPI.FileManagment.Core;
 using FileSharingAPI.FileManagment.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace FileSharingAPI.FileManagment.Infrastructure
+namespace FileSharingAPI.Infrastructure.FileManagment
 {
     public class StoreFileHeaders : IStoreFileHeaders
     {
@@ -54,10 +54,10 @@ namespace FileSharingAPI.FileManagment.Infrastructure
         public async Task<List<FileHeader>> GetUserFileHeadersAsync(string userId)
         {
             User user = await _dbContext.Users.Include(u => u.Files).FirstOrDefaultAsync(u => u.Id == userId);
-            
+
             if (user is null) return null;
 
-            return user.Files.ToList<FileHeader>();
+            return user.Files.ToList();
         }
     }
 }

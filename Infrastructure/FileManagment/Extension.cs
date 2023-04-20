@@ -1,4 +1,4 @@
-﻿namespace FileSharingAPI.FileManagment.Infrastructure
+﻿namespace FileSharingAPI.Infrastructure.FileManagment
 {
     public class Extension
     {

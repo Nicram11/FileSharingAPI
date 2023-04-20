@@ -1,5 +1,6 @@
-﻿using FileSharingAPI.Entities;
-using FileSharingAPI.Models;
+﻿
+using FileSharingAPI.Application.Models.Security;
+using FileSharingAPI.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ namespace FileSharingAPI.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+
 
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
@@ -29,16 +31,17 @@ namespace FileSharingAPI.Controllers
             }
 
             var result = await signInManager.PasswordSignInAsync(loginRequest.Email, loginRequest.Password, loginRequest.RememberMe, lockoutOnFailure: false);
-
-            if (result.Succeeded)
+            
+            if (!result.Succeeded)
             {
-                return Ok();
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Login failed.");
+                ModelState.AddModelError(string.Empty, "Incorrect Password");
                 return BadRequest(ModelState);
+               
             }
+
+            return Ok();
+
+
         }
 
 
@@ -62,9 +65,7 @@ namespace FileSharingAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            await signInManager.SignInAsync(user, isPersistent: false);
-
-            return Ok();
+            return CreatedAtAction(nameof(Login), user.Email);
         }
     }
 }
