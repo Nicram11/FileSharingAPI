@@ -15,13 +15,9 @@
             Success = result;
             CreatedFileGuid = createdFileGuid;
         }
-        public void Failed()
-        {
-            Success = false;
-        }
-        public void Successed()
-        {
-            Success = true;
-        }
+        public void Failed() => Success = false;
+      
+        public void Successed() => Success = true;
+    
     }
 }

@@ -1,10 +1,10 @@
-﻿
+﻿using FileSharingAPI.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace FileSharingAPI.Entities
+namespace FileSharingAPI.Database
 {
     public class FileSharingDbContext : IdentityDbContext<User>
     {
@@ -15,5 +15,5 @@ namespace FileSharingAPI.Entities
 
         }
     }
-  
+
 }
