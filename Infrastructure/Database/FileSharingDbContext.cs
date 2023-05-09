@@ -10,10 +10,7 @@ namespace FileSharingAPI.Database
     {
         public DbSet<FileHeader> Files { get; set; }
 
-        public FileSharingDbContext(DbContextOptions<FileSharingDbContext> options) : base(options)
-        {
-
-        }
+        public FileSharingDbContext(DbContextOptions<FileSharingDbContext> options) : base(options) { }
     }
 
 }
